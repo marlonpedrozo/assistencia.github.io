@@ -1,0 +1,306 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>MPF Soluções | Gestão Técnica</title>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
+<style>
+:root{--navy:#10243a;--blue:#176b87;--teal:#18a6a6;--bg:#f3f6f9;--muted:#6b7785}
+body{background:var(--bg);color:#1f2d3d;font-family:system-ui,-apple-system,"Segoe UI",sans-serif}
+.sidebar{background:var(--navy);min-height:100vh;color:#fff;width:250px;position:fixed;inset:0 auto 0 0;z-index:1000;padding:22px 14px}
+.brand{font-weight:800;letter-spacing:.4px;font-size:1.2rem}.brand small{display:block;font-size:.68rem;color:#9db5c8;font-weight:500;letter-spacing:1.5px}
+.nav-link{color:#c7d4df;border-radius:10px;padding:11px 13px;margin:3px 0;display:flex;gap:11px;align-items:center}
+.nav-link:hover,.nav-link.active{background:#21435f;color:white}.nav-link i{font-size:1.1rem;width:20px}
+.main{margin-left:250px;padding:28px;max-width:1600px}.topbar{display:flex;justify-content:space-between;align-items:center;margin-bottom:24px}
+.card{border:0;border-radius:15px;box-shadow:0 4px 18px rgba(20,45,70,.05)}.stat-card{padding:20px}.stat-icon{width:44px;height:44px;border-radius:12px;background:#e6f3f6;color:var(--blue);display:grid;place-items:center;font-size:1.25rem}
+.stat-value{font-size:1.8rem;font-weight:750}.muted{color:var(--muted)}.section{display:none}.section.active{display:block}
+.form-label{font-weight:600;font-size:.88rem}.form-control,.form-select{border-radius:9px;padding:.62rem .75rem;border-color:#dce3e9}
+.btn{border-radius:9px}.btn-primary{background:var(--blue);border-color:var(--blue)}.btn-primary:hover{background:#10566e}
+.table thead th{font-size:.78rem;text-transform:uppercase;letter-spacing:.4px;color:#718091;background:#f7f9fb;white-space:nowrap}
+.table td{vertical-align:middle}.badge-status{font-weight:600;padding:7px 10px;border-radius:20px}
+.status-Aguardando{background:#fff2d8;color:#936000}.status-Em{background:#e4f0ff;color:#1c5b9d}.status-Aprovado{background:#e4f6ed;color:#167348}.status-Concluído{background:#dff5f2;color:#087c72}.status-Entregue{background:#e9ecef;color:#59636e}.status-Cancelado{background:#fde8e8;color:#b02a37}
+.price-box{background:#edf7f8;border:1px solid #cce8eb;border-radius:12px;padding:15px}
+.empty{padding:35px;text-align:center;color:#82909d}.small-label{font-size:.78rem;color:#718091}
+.stock-photo{height:150px;width:100%;object-fit:contain;background:#f7f9fb;border-radius:10px;padding:8px}.stock-card{height:100%;overflow:hidden}.stock-low{color:#a66b00;background:#fff4db}.stock-ok{color:#167348;background:#e4f6ed}
+@media(max-width:850px){.sidebar{width:72px;padding:18px 9px}.brand{font-size:0}.brand:before{content:"MPF";font-size:1rem}.brand small,.nav-link span,.side-foot{display:none}.nav-link{justify-content:center;padding:12px}.nav-link i{width:auto}.main{margin-left:72px;padding:17px}.topbar{align-items:flex-start;gap:10px}}
+@media print{.sidebar,.topbar,.no-print,.btn,.filters{display:none!important}.main{margin:0;padding:0}.section{display:none!important}#reports{display:block!important}.card{box-shadow:none;border:1px solid #ddd}.table{font-size:11px}}
+</style>
+</head>
+<body>
+<aside class="sidebar">
+ <div class="brand mb-4 px-2">MPF SOLUÇÕES<small>GESTÃO TÉCNICA</small></div>
+ <div class="small text-uppercase px-2 mb-2" style="color:#7894aa;letter-spacing:1px">Menu principal</div>
+ <nav class="nav flex-column">
+  <a class="nav-link active" href="#" data-page="dashboard"><i class="bi bi-grid-1x2"></i><span>Painel</span></a>
+  <a class="nav-link" href="#" data-page="orders"><i class="bi bi-clipboard2-check"></i><span>Ordens de serviço</span></a>
+  <a class="nav-link" href="#" data-page="clients"><i class="bi bi-people"></i><span>Clientes</span></a>
+  <a class="nav-link" href="#" data-page="pricing"><i class="bi bi-tags"></i><span>Preços e serviços</span></a>
+  <a class="nav-link" href="#" data-page="stock"><i class="bi bi-box-seam"></i><span>Estoque</span></a>
+  <a class="nav-link" href="#" data-page="suppliers"><i class="bi bi-truck"></i><span>Fornecedores</span></a>
+  <a class="nav-link" href="#" data-page="reports"><i class="bi bi-file-earmark-bar-graph"></i><span>Relatórios e planilha</span></a>
+  <a class="nav-link" href="#" data-page="settings"><i class="bi bi-gear"></i><span>Configurações</span></a>
+ </nav>
+ <div class="side-foot position-absolute bottom-0 p-3 small" style="color:#7894aa">MPF Soluções • v1.0</div>
+</aside>
+<main class="main">
+ <header class="topbar">
+  <div><div class="small muted">Sistema de gestão</div><h3 class="fw-bold mb-0" id="pageTitle">Painel geral</h3></div>
+  <div class="d-flex gap-2"><button class="btn btn-outline-secondary btn-sm" onclick="backup()"><i class="bi bi-download me-1"></i>Backup</button><button class="btn btn-primary" onclick="openOrder()"><i class="bi bi-plus-lg me-1"></i>Nova OS</button></div>
+ </header>
+
+ <section id="dashboard" class="section active">
+  <div class="row g-3 mb-4">
+   <div class="col-6 col-xl-3"><div class="card stat-card"><div class="d-flex justify-content-between"><span class="muted">Ordens abertas</span><span class="stat-icon"><i class="bi bi-clipboard2"></i></span></div><div class="stat-value" id="statOpen">0</div><div class="small muted">Em andamento ou aguardando</div></div></div>
+   <div class="col-6 col-xl-3"><div class="card stat-card"><div class="d-flex justify-content-between"><span class="muted">Aguardando aprovação</span><span class="stat-icon"><i class="bi bi-hourglass-split"></i></span></div><div class="stat-value" id="statWait">0</div><div class="small muted">Orçamentos pendentes</div></div></div>
+   <div class="col-6 col-xl-3"><div class="card stat-card"><div class="d-flex justify-content-between"><span class="muted">Concluídas</span><span class="stat-icon"><i class="bi bi-check2-circle"></i></span></div><div class="stat-value" id="statDone">0</div><div class="small muted">Serviços finalizados</div></div></div>
+   <div class="col-6 col-xl-3"><div class="card stat-card"><div class="d-flex justify-content-between"><span class="muted">Receita registrada</span><span class="stat-icon"><i class="bi bi-currency-dollar"></i></span></div><div class="stat-value" id="statRevenue">R$ 0</div><div class="small muted">OS entregues no período</div></div></div>
+  </div>
+  <div class="card p-3 p-lg-4">
+   <div class="d-flex justify-content-between align-items-center mb-3"><div><h5 class="fw-bold mb-1">Ordens recentes</h5><div class="small muted">Acompanhe os últimos atendimentos</div></div><button class="btn btn-outline-primary btn-sm" onclick="showPage('orders')">Ver todas</button></div>
+   <div class="table-responsive"><table class="table"><thead><tr><th>OS</th><th>Cliente</th><th>Equipamento</th><th>Entrada</th><th>Status</th><th>Valor</th></tr></thead><tbody id="recentOrders"></tbody></table></div>
+  </div>
+ </section>
+
+ <section id="clients" class="section">
+  <div class="d-flex flex-wrap justify-content-between gap-2 mb-3"><div><h5 class="fw-bold">Cadastro de clientes</h5><p class="muted mb-0">Mantenha os dados dos clientes organizados.</p></div><button class="btn btn-primary" onclick="openClient()"><i class="bi bi-person-plus me-1"></i>Novo cliente</button></div>
+  <div class="card p-3"><div class="row mb-3"><div class="col-md-5"><input class="form-control" id="clientSearch" placeholder="Buscar por nome, telefone ou e-mail..." oninput="renderClients()"></div></div>
+  <div class="table-responsive"><table class="table"><thead><tr><th>Nome</th><th>Telefone</th><th>E-mail</th><th>CPF/CNPJ</th><th>Ações</th></tr></thead><tbody id="clientsTable"></tbody></table></div></div>
+ </section>
+
+ <section id="orders" class="section">
+  <div class="d-flex flex-wrap justify-content-between gap-2 mb-3"><div><h5 class="fw-bold">Ordens de serviço</h5><p class="muted mb-0">Registre entrada, diagnóstico, orçamento e entrega.</p></div><button class="btn btn-primary" onclick="openOrder()"><i class="bi bi-plus-lg me-1"></i>Abrir ordem de serviço</button></div>
+  <div class="card p-3"><div class="row g-2 mb-3 filters"><div class="col-md-4"><input id="orderSearch" class="form-control" placeholder="Buscar OS, cliente ou equipamento" oninput="renderOrders()"></div><div class="col-md-3"><select id="statusFilter" class="form-select" onchange="renderOrders()"><option value="">Todos os status</option><option>Aguardando</option><option>Em diagnóstico</option><option>Aprovado</option><option>Concluído</option><option>Entregue</option><option>Cancelado</option></select></div><div class="col-md-3"><input type="date" id="dateFilter" class="form-control" onchange="renderOrders()"></div></div>
+  <div class="table-responsive"><table class="table"><thead><tr><th>Nº OS</th><th>Cliente</th><th>Equipamento</th><th>Data</th><th>Status</th><th>Orçamento</th><th>Ações</th></tr></thead><tbody id="ordersTable"></tbody></table></div></div>
+ </section>
+
+ <section id="pricing" class="section">
+  <div class="mb-3"><h5 class="fw-bold">Tabela de serviços e preços</h5><p class="muted mb-0">Edite os valores de referência. A sugestão é uma base para orçamento, não substitui o diagnóstico.</p></div>
+  <div class="card p-3"><div class="d-flex justify-content-between align-items-center mb-3"><h6 class="fw-bold mb-0">Catálogo de serviços</h6><button class="btn btn-primary btn-sm" onclick="addPrice()"><i class="bi bi-plus-lg me-1"></i>Adicionar serviço</button></div>
+  <div class="table-responsive"><table class="table"><thead><tr><th>Categoria</th><th>Serviço</th><th>Preço sugerido (R$)</th><th></th></tr></thead><tbody id="pricesTable"></tbody></table></div></div>
+ </section>
+
+ <section id="stock" class="section">
+  <div class="d-flex flex-wrap justify-content-between gap-2 mb-3"><div><h5 class="fw-bold">Estoque de produtos</h5><p class="muted mb-0">Controle acessórios, quantidades, custos e preços de venda.</p></div><button class="btn btn-primary" onclick="openStockItem()"><i class="bi bi-plus-lg me-1"></i>Adicionar produto</button></div>
+  <div class="row g-3 mb-3"><div class="col-6 col-xl-3"><div class="card p-3"><div class="small muted">Produtos cadastrados</div><div class="stat-value" id="stockCount">0</div></div></div><div class="col-6 col-xl-3"><div class="card p-3"><div class="small muted">Unidades em estoque</div><div class="stat-value" id="stockUnits">0</div></div></div><div class="col-6 col-xl-3"><div class="card p-3"><div class="small muted">Estoque baixo</div><div class="stat-value" id="stockLow">0</div></div></div><div class="col-6 col-xl-3"><div class="card p-3"><div class="small muted">Valor de custo em estoque</div><div class="stat-value" id="stockValue">R$ 0</div></div></div></div>
+  <div class="card p-3"><div class="row g-2 mb-3 filters"><div class="col-md-5"><input id="stockSearch" class="form-control" placeholder="Buscar produto, marca ou modelo..." oninput="renderStock()"></div><div class="col-md-3"><select id="stockCategoryFilter" class="form-select" onchange="renderStock()"><option value="">Todas as categorias</option><option>Teclados</option><option>Películas</option><option>Mouses</option><option>Capinhas</option><option>Cabos e carregadores</option><option>Outros</option></select></div><div class="col-md-2"><select id="stockLevelFilter" class="form-select" onchange="renderStock()"><option value="">Todos</option><option value="low">Estoque baixo</option><option value="out">Sem estoque</option></select></div></div>
+  <div class="row g-3" id="stockGrid"></div></div>
+  <p class="small muted mt-2">As fotos são ilustrativas e carregadas de sites externos. Você pode substituir a imagem de cada item por uma foto própria ou por outra URL.</p>
+ </section>
+
+
+ <section id="suppliers" class="section">
+  <div class="d-flex flex-wrap justify-content-between gap-2 mb-3">
+   <div><h5 class="fw-bold">Lista de fornecedores</h5><p class="muted mb-0">Organize contatos, produtos fornecidos e condições comerciais.</p></div>
+   <button class="btn btn-primary" onclick="openSupplier()"><i class="bi bi-plus-lg me-1"></i>Novo fornecedor</button>
+  </div>
+  <div class="row g-3 mb-3">
+   <div class="col-6 col-xl-3"><div class="card p-3"><div class="small muted">Fornecedores cadastrados</div><div class="stat-value" id="supplierCount">0</div></div></div>
+   <div class="col-6 col-xl-3"><div class="card p-3"><div class="small muted">Ativos</div><div class="stat-value" id="supplierActive">0</div></div></div>
+  </div>
+  <div class="card p-3">
+   <div class="row g-2 mb-3 filters">
+    <div class="col-md-6"><input id="supplierSearch" class="form-control" placeholder="Buscar por nome, empresa, produto ou telefone..." oninput="renderSuppliers()"></div>
+    <div class="col-md-3"><select id="supplierCategoryFilter" class="form-select" onchange="renderSuppliers()"><option value="">Todas as categorias</option><option>Acessórios para celular</option><option>Peças para celular</option><option>Informática</option><option>Componentes eletrônicos</option><option>Materiais e ferramentas</option><option>Outros</option></select></div>
+    <div class="col-md-3"><select id="supplierStatusFilter" class="form-select" onchange="renderSuppliers()"><option value="">Todos os status</option><option>Ativo</option><option>Inativo</option></select></div>
+   </div>
+   <div class="table-responsive"><table class="table"><thead><tr><th>Fornecedor / empresa</th><th>Categoria</th><th>Contato</th><th>Telefone</th><th>Produtos / serviços</th><th>Status</th><th>Ações</th></tr></thead><tbody id="suppliersTable"></tbody></table></div>
+  </div>
+ </section>
+
+ <section id="reports" class="section">
+  <div class="mb-3"><h5 class="fw-bold">Relatórios e planilha</h5><p class="muted mb-0">Filtre os atendimentos, imprima o resumo ou exporte os dados para Excel.</p></div>
+  <div class="card p-3 mb-3"><div class="row g-2 align-items-end filters"><div class="col-md-3"><label class="form-label">Data inicial</label><input type="date" class="form-control" id="reportStart"></div><div class="col-md-3"><label class="form-label">Data final</label><input type="date" class="form-control" id="reportEnd"></div><div class="col-md-3"><label class="form-label">Status</label><select id="reportStatus" class="form-select"><option value="">Todos</option><option>Aguardando</option><option>Em diagnóstico</option><option>Aprovado</option><option>Concluído</option><option>Entregue</option><option>Cancelado</option></select></div><div class="col-md-3 d-flex gap-2"><button class="btn btn-primary flex-fill" onclick="renderReport()">Filtrar</button><button class="btn btn-outline-secondary" onclick="clearReport()">Limpar</button></div></div></div>
+  <div class="row g-3 mb-3"><div class="col-md-4"><div class="card p-3"><div class="small muted">Ordens no relatório</div><div class="stat-value" id="reportCount">0</div></div></div><div class="col-md-4"><div class="card p-3"><div class="small muted">Total orçado</div><div class="stat-value" id="reportQuoted">R$ 0</div></div></div><div class="col-md-4"><div class="card p-3"><div class="small muted">Total entregue</div><div class="stat-value" id="reportPaid">R$ 0</div></div></div></div>
+  <div class="card p-3"><div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-3"><h6 class="fw-bold mb-0">Detalhamento das ordens</h6><div class="d-flex gap-2 no-print"><button class="btn btn-outline-success btn-sm" onclick="exportCSV()"><i class="bi bi-file-earmark-spreadsheet me-1"></i>Exportar planilha CSV</button><button class="btn btn-outline-secondary btn-sm" onclick="window.print()"><i class="bi bi-printer me-1"></i>Imprimir / PDF</button></div></div>
+  <div class="table-responsive"><table class="table"><thead><tr><th>OS</th><th>Data</th><th>Cliente</th><th>Telefone</th><th>Equipamento</th><th>Diagnóstico</th><th>Status</th><th>Valor</th></tr></thead><tbody id="reportTable"></tbody></table></div></div>
+ </section>
+
+ <section id="settings" class="section">
+  <div class="mb-3"><h5 class="fw-bold">Configurações e segurança</h5><p class="muted mb-0">Personalize a identificação da assistência e gerencie seus dados.</p></div>
+  <div class="card p-4 mb-3"><h6 class="fw-bold">Dados da assistência</h6><div class="row g-3"><div class="col-md-6"><label class="form-label">Nome comercial</label><input id="companyName" class="form-control" value="MPF Soluções"></div><div class="col-md-6"><label class="form-label">WhatsApp / telefone</label><input id="companyPhone" class="form-control" placeholder="(51) 99999-9999"></div><div class="col-md-6"><label class="form-label">E-mail</label><input id="companyEmail" class="form-control" placeholder="contato@..."></div><div class="col-md-6"><label class="form-label">Cidade / endereço</label><input id="companyAddress" class="form-control" placeholder="Novo Hamburgo - RS"></div></div><button class="btn btn-primary mt-3" onclick="saveSettings()">Salvar dados</button></div>
+  <div class="card p-4"><h6 class="fw-bold">Backup e restauração</h6><p class="muted small">Os dados são armazenados localmente neste navegador e neste dispositivo. Exporte backups regularmente e evite limpar os dados do navegador.</p><div class="d-flex flex-wrap gap-2"><button class="btn btn-outline-primary" onclick="backup()"><i class="bi bi-download me-1"></i>Baixar backup completo</button><label class="btn btn-outline-secondary mb-0"><i class="bi bi-upload me-1"></i>Restaurar backup<input type="file" accept=".json,application/json" hidden onchange="restoreBackup(event)"></label><button class="btn btn-outline-danger ms-md-auto" onclick="clearAll()">Apagar todos os dados</button></div></div>
+ </section>
+</main>
+
+<!-- Cliente -->
+<div class="modal fade" id="clientModal" tabindex="-1"><div class="modal-dialog modal-lg modal-dialog-centered"><div class="modal-content border-0 rounded-4"><div class="modal-header"><h5 class="modal-title fw-bold">Cadastro de cliente</h5><button class="btn-close" data-bs-dismiss="modal"></button></div><div class="modal-body"><input type="hidden" id="clientId"><div class="row g-3"><div class="col-md-7"><label class="form-label">Nome completo *</label><input id="cName" class="form-control" required></div><div class="col-md-5"><label class="form-label">Telefone / WhatsApp *</label><input id="cPhone" class="form-control" required></div><div class="col-md-6"><label class="form-label">E-mail</label><input id="cEmail" type="email" class="form-control"></div><div class="col-md-6"><label class="form-label">CPF / CNPJ</label><input id="cDoc" class="form-control"></div><div class="col-12"><label class="form-label">Endereço</label><input id="cAddress" class="form-control"></div><div class="col-12"><label class="form-label">Observações</label><textarea id="cNotes" class="form-control" rows="2"></textarea></div></div></div><div class="modal-footer"><button class="btn btn-light" data-bs-dismiss="modal">Cancelar</button><button class="btn btn-primary" onclick="saveClient()">Salvar cliente</button></div></div></div></div>
+
+<!-- Ordem -->
+<div class="modal fade" id="orderModal" tabindex="-1"><div class="modal-dialog modal-xl modal-dialog-centered modal-dialog-scrollable"><div class="modal-content border-0 rounded-4"><div class="modal-header"><div><h5 class="modal-title fw-bold" id="orderModalTitle">Nova ordem de serviço</h5><div class="small muted">Preencha os dados e registre o diagnóstico técnico.</div></div><button class="btn-close" data-bs-dismiss="modal"></button></div><div class="modal-body">
+<input type="hidden" id="oId">
+<div class="row g-3">
+ <div class="col-md-4"><label class="form-label">Cliente *</label><div class="input-group"><input id="oClientSearch" class="form-control" list="oClientList" placeholder="Digite para localizar cliente..." autocomplete="off" oninput="matchOrderClient()"><datalist id="oClientList"></datalist><input type="hidden" id="oClient"><button class="btn btn-outline-primary" type="button" title="Cadastrar novo cliente" onclick="openClientFromOrder()"><i class="bi bi-plus-lg"></i></button></div><div class="form-text">Pesquise pelo nome ou telefone. Use + para cadastrar.</div></div><div class="col-md-4"><label class="form-label">Data de entrada</label><input type="date" id="oDate" class="form-control"></div><div class="col-md-4"><label class="form-label">Prazo previsto</label><input type="date" id="oDeadline" class="form-control"></div>
+ <div class="col-md-3"><label class="form-label">Tipo de equipamento *</label><select id="oType" class="form-select"><option>Celular</option><option>Tablet</option><option>Notebook</option><option>Computador</option><option>Impressora</option><option>Outro</option></select></div><div class="col-md-3"><label class="form-label">Marca</label><select id="oBrand" class="form-select" onchange="updateModelOptions()"><option value="">Selecione a marca</option><option>Apple</option><option>Samsung</option><option>Positivo</option><option>Motorola</option><option>Xiaomi</option><option>LG</option><option>Asus</option><option>Acer</option><option>Lenovo</option><option>Dell</option><option>HP</option><option>Multilaser</option><option>Huawei</option><option>Nokia</option><option>TCL</option><option>Realme</option><option>Outra</option></select></div><div class="col-md-3"><label class="form-label">Modelo</label><input id="oModel" class="form-control" list="modelOptions" placeholder="Selecione ou digite o modelo" autocomplete="off"><datalist id="modelOptions"></datalist></div><div class="col-md-3"><label class="form-label">IMEI / Nº de série</label><input id="oSerial" class="form-control" placeholder="IMEI ou número de série"><div class="form-text text-secondary">Para consultar o IMEI, digite <strong>*#06#</strong> no aparelho.</div></div>
+ <div class="col-md-6"><label class="form-label">Acessórios recebidos</label><div class="input-group"><input id="oAccessories" class="form-control" placeholder="Carregador, capa, cabo..."><span class="input-group-text bg-white"><input class="form-check-input mt-0 me-2" type="checkbox" id="oNoAccessories" onchange="toggleNoAccessories()"> <label for="oNoAccessories" class="small mb-0">Nenhum</label></span></div></div><div class="col-md-6"><label class="form-label">Condição de entrada</label><input id="oCondition" class="form-control" list="conditionOptions" placeholder="Selecione ou descreva a condição" autocomplete="off"><datalist id="conditionOptions"><option value="Não liga"><option value="Tela trincada / quebrada"><option value="Tela com manchas / linhas"><option value="Touch não funciona"><option value="Bateria não segura carga"><option value="Não carrega"><option value="Conector de carga danificado"><option value="Superaquecimento"><option value="Danos por líquido / umidade"><option value="Lento / travando"><option value="Reiniciando sozinho"><option value="Sem áudio / microfone"><option value="Câmera não funciona"><option value="Teclado danificado"><option value="Carcaça / dobradiça danificada"><option value="Marcas de uso / riscos"><option value="Sem avarias aparentes"></datalist></div>
+ <div class="col-12"><label class="form-label">Relato do cliente / defeito informado *</label><textarea id="oProblem" class="form-control" rows="2" placeholder="Descreva o problema relatado pelo cliente"></textarea></div>
+ <div class="col-md-6"><label class="form-label">Diagnóstico técnico</label><textarea id="oDiagnosis" class="form-control" rows="3" placeholder="Causa identificada após avaliação"></textarea></div><div class="col-md-6"><label class="form-label">Serviço recomendado / peças</label><textarea id="oWork" class="form-control" rows="3" placeholder="Serviço, componente ou peça necessária"></textarea></div>
+ <div class="col-md-4"><label class="form-label">Serviço de referência</label><select id="oPrice" class="form-select" onchange="suggestPrice()"></select></div><div class="col-md-2"><label class="form-label">Preço sugerido (R$)</label><input id="oSuggested" type="number" step=".01" class="form-control" readonly></div><div class="col-md-2"><label class="form-label">Peças (R$)</label><input id="oParts" type="number" min="0" step=".01" class="form-control" value="0" oninput="calcTotal()"></div><div class="col-md-2"><label class="form-label">Desconto (R$)</label><input id="oDiscount" type="number" min="0" step=".01" class="form-control" value="0" oninput="calcTotal()"></div><div class="col-md-2"><label class="form-label">Total sugerido</label><input id="oTotal" class="form-control fw-bold" readonly></div>
+ <div class="col-md-4"><label class="form-label">Status</label><select id="oStatus" class="form-select"><option>Aguardando</option><option>Em diagnóstico</option><option>Aprovado</option><option>Concluído</option><option>Entregue</option><option>Cancelado</option></select></div><div class="col-md-4"><label class="form-label">Pagamento</label><select id="oPayment" class="form-select"><option>Pendente</option><option>Pix</option><option>Dinheiro</option><option>Cartão débito</option><option>Cartão crédito</option><option>Transferência</option></select></div><div class="col-md-4"><label class="form-label">Garantia (dias)</label><input id="oWarranty" type="number" min="0" class="form-control" value="90"></div>
+ <div class="col-12"><div class="price-box small"><strong><i class="bi bi-lightbulb me-1"></i>Como funciona a sugestão?</strong><br>Ao selecionar um serviço, o sistema preenche o preço cadastrado no catálogo. Você pode ajustar peças, desconto e total conforme o diagnóstico. Confirme o orçamento com o cliente antes de executar o serviço.</div></div>
+ <div class="col-12"><label class="form-label">Observações internas</label><textarea id="oNotes" class="form-control" rows="2"></textarea></div>
+</div></div><div class="modal-footer"><button class="btn btn-light" data-bs-dismiss="modal">Cancelar</button><button class="btn btn-outline-secondary" onclick="printCurrentOrder()">Imprimir OS</button><button class="btn btn-primary" onclick="saveOrder()">Salvar ordem</button></div></div></div></div>
+
+<div class="modal fade" id="stockModal" tabindex="-1"><div class="modal-dialog modal-lg modal-dialog-centered"><div class="modal-content border-0 rounded-4"><div class="modal-header"><h5 class="modal-title fw-bold" id="stockModalTitle">Adicionar produto ao estoque</h5><button class="btn-close" data-bs-dismiss="modal"></button></div><div class="modal-body"><input type="hidden" id="sId"><div class="row g-3"><div class="col-md-6"><label class="form-label">Nome do produto *</label><input id="sName" class="form-control" placeholder="Ex.: Película de vidro 6,5 polegadas"></div><div class="col-md-3"><label class="form-label">Categoria *</label><select id="sCategory" class="form-select"><option>Teclados</option><option>Películas</option><option>Mouses</option><option>Capinhas</option><option>Cabos e carregadores</option><option>Outros</option></select></div><div class="col-md-3"><label class="form-label">Marca</label><input id="sBrand" class="form-control" placeholder="Marca"></div><div class="col-md-4"><label class="form-label">Modelo / compatibilidade</label><input id="sModel" class="form-control" placeholder="Ex.: Samsung A15"></div><div class="col-md-2"><label class="form-label">Quantidade</label><input id="sQty" type="number" min="0" step="1" class="form-control" value="0"></div><div class="col-md-2"><label class="form-label">Estoque mínimo</label><input id="sMin" type="number" min="0" step="1" class="form-control" value="2"></div><div class="col-md-2"><label class="form-label">Custo (R$)</label><input id="sCost" type="number" min="0" step=".01" class="form-control" value="0"></div><div class="col-md-2"><label class="form-label">Venda (R$)</label><input id="sSale" type="number" min="0" step=".01" class="form-control" value="0"></div><div class="col-md-9"><label class="form-label">Foto / URL da imagem</label><input id="sImage" class="form-control" placeholder="https://... (ou deixe a imagem ilustrativa sugerida)"></div><div class="col-md-3 d-flex align-items-end"><div class="form-check mb-2"><input class="form-check-input" type="checkbox" id="sActive" checked><label class="form-check-label" for="sActive">Produto ativo</label></div></div><div class="col-12"><label class="form-label">Observações</label><textarea id="sNotes" class="form-control" rows="2"></textarea></div></div></div><div class="modal-footer"><button class="btn btn-light" data-bs-dismiss="modal">Cancelar</button><button class="btn btn-primary" onclick="saveStockItem()">Salvar produto</button></div></div></div></div>
+
+<div class="modal fade" id="priceModal" tabindex="-1"><div class="modal-dialog modal-dialog-centered"><div class="modal-content border-0 rounded-4"><div class="modal-header"><h5 class="modal-title fw-bold">Serviço de referência</h5><button class="btn-close" data-bs-dismiss="modal"></button></div><div class="modal-body"><input type="hidden" id="pId"><label class="form-label">Categoria</label><input id="pCategory" class="form-control mb-3"><label class="form-label">Nome do serviço</label><input id="pName" class="form-control mb-3"><label class="form-label">Preço sugerido (R$)</label><input id="pValue" type="number" min="0" step=".01" class="form-control"></div><div class="modal-footer"><button class="btn btn-light" data-bs-dismiss="modal">Cancelar</button><button class="btn btn-primary" onclick="savePrice()">Salvar</button></div></div></div></div>
+
+
+<div class="modal fade" id="supplierModal" tabindex="-1"><div class="modal-dialog modal-lg modal-dialog-centered"><div class="modal-content border-0 rounded-4">
+ <div class="modal-header"><h5 class="modal-title fw-bold" id="supplierModalTitle">Novo fornecedor</h5><button class="btn-close" data-bs-dismiss="modal"></button></div>
+ <div class="modal-body"><input type="hidden" id="supId"><div class="row g-3">
+  <div class="col-md-7"><label class="form-label">Nome da empresa / fornecedor *</label><input id="supCompany" class="form-control" placeholder="Nome comercial ou razão social"></div>
+  <div class="col-md-5"><label class="form-label">Pessoa de contato</label><input id="supContact" class="form-control" placeholder="Nome do vendedor / representante"></div>
+  <div class="col-md-4"><label class="form-label">Categoria *</label><select id="supCategory" class="form-select"><option>Acessórios para celular</option><option>Peças para celular</option><option>Informática</option><option>Componentes eletrônicos</option><option>Materiais e ferramentas</option><option>Outros</option></select></div>
+  <div class="col-md-2"><label class="form-label">DDD</label><input id="supDDD" class="form-control" inputmode="numeric" maxlength="2" placeholder="51"></div>
+  <div class="col-md-3"><label class="form-label">Telefone / WhatsApp</label><input id="supPhone" class="form-control" inputmode="tel" placeholder="99999-9999"></div>
+  <div class="col-md-3"><label class="form-label">Status</label><select id="supStatus" class="form-select"><option>Ativo</option><option>Inativo</option></select></div>
+  <div class="col-md-6"><label class="form-label">E-mail</label><input id="supEmail" type="email" class="form-control" placeholder="vendas@fornecedor.com"></div>
+  <div class="col-md-6"><label class="form-label">Site / loja online</label><input id="supWebsite" class="form-control" placeholder="https://..."></div>
+  <div class="col-md-6"><label class="form-label">Produtos / serviços fornecidos</label><input id="supProducts" class="form-control" placeholder="Películas, telas, baterias..."></div>
+  <div class="col-md-6"><label class="form-label">Cidade / endereço</label><input id="supAddress" class="form-control" placeholder="Cidade - UF"></div>
+  <div class="col-12"><label class="form-label">Condições comerciais / observações</label><textarea id="supNotes" class="form-control" rows="3" placeholder="Prazo de entrega, formas de pagamento, pedido mínimo, garantia..."></textarea></div>
+ </div></div>
+ <div class="modal-footer"><button class="btn btn-light" data-bs-dismiss="modal">Cancelar</button><button class="btn btn-primary" onclick="saveSupplier()">Salvar fornecedor</button></div>
+</div></div></div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+const $=id=>document.getElementById(id), money=v=>(Number(v)||0).toLocaleString('pt-BR',{style:'currency',currency:'BRL'});
+const today=()=>new Date().toISOString().slice(0,10);
+const seedPrices=[
+ ['Android','Software (Gmail, app, ROM, reset)',65],['Android','Troca de tela / display / touch',125],['Android','Troca de bateria',70],['Android','Limpeza química (caiu na água)',0],['Android','Troca de vidro (touch/display funcionando)',200],['Android','Reparos simples (conectores, botões etc.)',115],['Android','Reparos avançados na placa (reflow / reballing)',300],['PC / Notebook','Conserto de notebooks / PCs',0],['PC / Notebook','Instalação de sistemas Windows / Linux',100],['Dados','Backup e recuperação de dados',200],['PC / Notebook','Formatação e otimização de desempenho',100],['PC / Notebook','Formatação e instalação de RAM / HD / SSD',100],['Impressoras','Desentupimento / manutenção (jato de tinta doméstica)',150]
+];
+let db=JSON.parse(localStorage.getItem('mpf_db')||'null')||{clients:[],orders:[],prices:seedPrices.map((p,i)=>({id:'p'+i,category:p[0],name:p[1],value:p[2]})),settings:{}};
+const stockIllustrations={
+ 'Teclados':'https://cdn.crusoe.com.br/uploads/2025/06/2149404179.jpg',
+ 'Películas':'https://sirfon.com/assets/accessories.webp',
+ 'Mouses':'https://cdn.crusoe.com.br/uploads/2025/06/2149404179.jpg',
+ 'Capinhas':'https://www.mobilmax-servis.cz/user/articles/images/pouzdra_a_skla.jpeg',
+ 'Cabos e carregadores':'https://www.chinahub.com/assets/uploads/categories/cat_103_1784140739.png',
+ 'Outros':'https://www.chinahub.com/assets/uploads/categories/cat_103_1784140739.png'
+};
+if(!Array.isArray(db.stock))db.stock=[];
+if(!Array.isArray(db.suppliers))db.suppliers=[];
+let currentPrint=null;
+function persist(){localStorage.setItem('mpf_db',JSON.stringify(db));refreshAll()}
+function uid(){return Date.now().toString(36)+Math.random().toString(36).slice(2,6)}
+function esc(s){return String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+function showPage(id){document.querySelectorAll('.section').forEach(x=>x.classList.toggle('active',x.id===id));document.querySelectorAll('.nav-link').forEach(x=>x.classList.toggle('active',x.dataset.page===id));$('pageTitle').textContent=({dashboard:'Painel geral',clients:'Clientes',orders:'Ordens de serviço',pricing:'Preços e serviços',stock:'Estoque',suppliers:'Fornecedores',reports:'Relatórios e planilha',settings:'Configurações'})[id];if(id==='reports')renderReport();if(id==='stock')renderStock()}
+document.querySelectorAll('.nav-link').forEach(a=>a.addEventListener('click',e=>{e.preventDefault();showPage(a.dataset.page)}));
+const modal=id=>bootstrap.Modal.getOrCreateInstance($(id));
+function openClient(id){if(!clientReturnToOrder)clientReturnToOrder=false;let c=db.clients.find(x=>x.id===id)||{};$('clientId').value=c.id||'';$('cName').value=c.name||'';$('cPhone').value=c.phone||'';$('cEmail').value=c.email||'';$('cDoc').value=c.doc||'';$('cAddress').value=c.address||'';$('cNotes').value=c.notes||'';modal('clientModal').show()}
+function saveClient(){let name=$('cName').value.trim(),phone=$('cPhone').value.trim();if(!name||!phone){alert('Informe nome e telefone do cliente.');return}let id=$('clientId').value,c={id:id||uid(),name,phone,email:$('cEmail').value,doc:$('cDoc').value,address:$('cAddress').value,notes:$('cNotes').value};let i=db.clients.findIndex(x=>x.id===id);if(i>=0)db.clients[i]=c;else db.clients.push(c);modal('clientModal').hide();persist();if(clientReturnToOrder){clientReturnToOrder=false;fillClientSelect(c.id);modal('orderModal').show()}}
+function renderClients(){let q=($('clientSearch')?.value||'').toLowerCase(),arr=db.clients.filter(c=>(c.name+' '+c.phone+' '+c.email).toLowerCase().includes(q));$('clientsTable').innerHTML=arr.length?arr.map(c=>`<tr><td class="fw-semibold">${esc(c.name)}</td><td>${esc(c.phone)}</td><td>${esc(c.email||'—')}</td><td>${esc(c.doc||'—')}</td><td><button class="btn btn-sm btn-outline-primary" onclick="openClient('${c.id}')"><i class="bi bi-pencil"></i></button> <button class="btn btn-sm btn-outline-danger" onclick="deleteClient('${c.id}')"><i class="bi bi-trash"></i></button></td></tr>`).join(''):'<tr><td colspan="5" class="empty">Nenhum cliente cadastrado.</td></tr>'}
+function deleteClient(id){if(db.orders.some(o=>o.clientId===id)){alert('Este cliente possui ordens vinculadas. Não é possível excluir.');return}if(confirm('Excluir este cliente?')){db.clients=db.clients.filter(c=>c.id!==id);persist()}}
+let clientReturnToOrder=false;
+const modelsByBrand={
+ 'Apple':['iPhone 11','iPhone 12','iPhone 13','iPhone 14','iPhone 15','iPhone 16','iPhone SE','iPad'],
+ 'Samsung':['Galaxy A05','Galaxy A15','Galaxy A25','Galaxy A35','Galaxy A55','Galaxy S22','Galaxy S23','Galaxy S24','Galaxy S25','Galaxy M15','Galaxy M55'],
+ 'Positivo':['Twist','Twist 5','Q10','Vision C','Motion Q','Motion Gray'],
+ 'Motorola':['Moto E13','Moto E22','Moto G14','Moto G24','Moto G34','Moto G54','Moto G84','Edge 40','Edge 50'],
+ 'Xiaomi':['Redmi 9','Redmi 10','Redmi 12','Redmi 13C','Redmi Note 11','Redmi Note 12','Redmi Note 13','Poco X5','Poco X6'],
+ 'LG':['K41s','K51s','K52','K62','K série','Velvet'],
+ 'Asus':['Zenfone 8','Zenfone 9','Zenfone 10','ROG Phone','VivoBook'],
+ 'Acer':['Aspire 3','Aspire 5','Nitro 5','Swift 3'],
+ 'Lenovo':['IdeaPad 3','IdeaPad 5','ThinkPad','Legion'],
+ 'Dell':['Inspiron 15','Vostro','Latitude','XPS'],
+ 'HP':['HP 250','Pavilion','ProBook','EliteBook'],
+ 'Multilaser':['G','M','E','M-Pro'],
+ 'Huawei':['P30 Lite','P40 Lite','Nova 5T','MateBook'],
+ 'Nokia':['G20','G21','G50','C21'],
+ 'TCL':['30 SE','40 SE','20Y','20B'],
+ 'Realme':['C35','C53','C55','C67','Note 50']
+};
+function fillClientSelect(selected){$('oClient').value=selected||'';$('oClientSearch').value=selected?(db.clients.find(c=>c.id===selected)?.name+' — '+(db.clients.find(c=>c.id===selected)?.phone||'')):'';$('oClientList').innerHTML=db.clients.map(c=>`<option value="${esc(c.name+' — '+c.phone)}"></option>`).join('')}
+function matchOrderClient(){let value=$('oClientSearch').value.trim().toLowerCase(),c=db.clients.find(x=>(x.name+' — '+x.phone).toLowerCase()===value)||db.clients.find(x=>x.name.toLowerCase()===value);$('oClient').value=c?c.id:''}
+function openClientFromOrder(){clientReturnToOrder=true;openClient()} 
+function updateModelOptions(){let brand=$('oBrand').value,models=modelsByBrand[brand]||[];$('modelOptions').innerHTML=models.map(m=>`<option value="${esc(m)}">`).join('');if(brand==='Apple')alert('Atenção: conforme a tabela de serviços cadastrada, dispositivos Apple não são atendidos pela assistência.')}
+function toggleNoAccessories(){let checked=$('oNoAccessories').checked;$('oAccessories').disabled=checked;if(checked)$('oAccessories').value='Nenhum';else if($('oAccessories').value==='Nenhum')$('oAccessories').value=''}
+function fillPriceSelect(selected){$('oPrice').innerHTML='<option value="">Selecione um serviço</option>'+db.prices.map(p=>`<option value="${p.id}">${esc(p.category)} • ${esc(p.name)}</option>`).join('');if(selected)$('oPrice').value=selected}
+function openOrder(id){if(!db.clients.length){alert('Cadastre um cliente antes de abrir uma OS.');showPage('clients');openClient();return}let o=db.orders.find(x=>x.id===id)||{};$('orderModalTitle').textContent=id?'Editar ordem de serviço':'Nova ordem de serviço';$('oId').value=o.id||'';fillClientSelect(o.clientId);fillPriceSelect(o.priceId);$('oDate').value=o.date||today();$('oDeadline').value=o.deadline||'';$('oType').value=o.type||'Celular';$('oBrand').value=o.brand||'';updateModelOptions();$('oModel').value=o.model||'';$('oSerial').value=o.serial||'';$('oAccessories').value=o.accessories||'';$('oNoAccessories').checked=(o.accessories==='Nenhum');$('oAccessories').disabled=$('oNoAccessories').checked;$('oCondition').value=o.condition||'';$('oProblem').value=o.problem||'';$('oDiagnosis').value=o.diagnosis||'';$('oWork').value=o.work||'';$('oSuggested').value=o.suggested??'';$('oParts').value=o.parts??0;$('oDiscount').value=o.discount??0;$('oTotal').value=o.total??'';$('oStatus').value=o.status||'Aguardando';$('oPayment').value=o.payment||'Pendente';$('oWarranty').value=o.warranty??90;$('oNotes').value=o.notes||'';if(o.id)currentPrint=o;else currentPrint=null;calcTotal();modal('orderModal').show()}
+function suggestPrice(){let p=db.prices.find(x=>x.id===$('oPrice').value);$('oSuggested').value=p?Number(p.value).toFixed(2):'';calcTotal()}
+function calcTotal(){let base=Number($('oSuggested').value)||0,parts=Number($('oParts').value)||0,discount=Number($('oDiscount').value)||0;$('oTotal').value=Math.max(0,base+parts-discount).toFixed(2)}
+function saveOrder(){if(!$('oClient').value||!$('oProblem').value.trim()){alert('Selecione o cliente e descreva o problema informado.');return}calcTotal();let id=$('oId').value,o={id:id||uid(),number:id?(db.orders.find(x=>x.id===id)?.number):String(Math.max(199,...db.orders.map(x=>Number(x.number)||0))+1).padStart(5,'0'),clientId:$('oClient').value,date:$('oDate').value,deadline:$('oDeadline').value,type:$('oType').value,brand:$('oBrand').value,model:$('oModel').value,serial:$('oSerial').value,accessories:$('oAccessories').value,condition:$('oCondition').value,problem:$('oProblem').value,diagnosis:$('oDiagnosis').value,work:$('oWork').value,priceId:$('oPrice').value,suggested:Number($('oSuggested').value)||0,parts:Number($('oParts').value)||0,discount:Number($('oDiscount').value)||0,total:Number($('oTotal').value)||0,status:$('oStatus').value,payment:$('oPayment').value,warranty:Number($('oWarranty').value)||0,notes:$('oNotes').value};let i=db.orders.findIndex(x=>x.id===id);if(i>=0)db.orders[i]=o;else db.orders.push(o);currentPrint=o;modal('orderModal').hide();persist()}
+function clientName(id){return db.clients.find(c=>c.id===id)?.name||'Cliente removido'}
+function statusBadge(s){let cls=s==='Em diagnóstico'?'Em':s==='Concluído'?'Concluído':s;return `<span class="badge-status status-${esc(cls)}">${esc(s)}</span>`}
+function renderOrders(){let q=($('orderSearch')?.value||'').toLowerCase(),st=$('statusFilter')?.value||'',dt=$('dateFilter')?.value||'';let arr=[...db.orders].reverse().filter(o=>(!st||o.status===st)&&(!dt||o.date===dt)&&(String(o.number+' '+clientName(o.clientId)+' '+o.type+' '+o.brand+' '+o.model).toLowerCase().includes(q)));$('ordersTable').innerHTML=arr.length?arr.map(o=>`<tr><td class="fw-bold">#${o.number}</td><td>${esc(clientName(o.clientId))}</td><td>${esc([o.brand,o.model,o.type].filter(Boolean).join(' '))}</td><td>${esc(o.date||'')}</td><td>${statusBadge(o.status)}</td><td class="fw-semibold">${money(o.total)}</td><td class="text-nowrap"><button class="btn btn-sm btn-outline-primary" title="Editar" onclick="openOrder('${o.id}')"><i class="bi bi-pencil"></i></button> <button class="btn btn-sm btn-outline-secondary" title="Imprimir" onclick="printOrder('${o.id}')"><i class="bi bi-printer"></i></button> <button class="btn btn-sm btn-outline-danger" title="Excluir" onclick="deleteOrder('${o.id}')"><i class="bi bi-trash"></i></button></td></tr>`).join(''):'<tr><td colspan="7" class="empty">Nenhuma ordem encontrada.</td></tr>'}
+function deleteOrder(id){if(confirm('Excluir esta ordem de serviço?')){db.orders=db.orders.filter(o=>o.id!==id);persist()}}
+function renderPrices(){$('pricesTable').innerHTML=db.prices.map(p=>`<tr><td>${esc(p.category)}</td><td class="fw-semibold">${esc(p.name)}</td><td>${money(p.value)}</td><td class="text-end"><button class="btn btn-sm btn-outline-primary" onclick="editPrice('${p.id}')"><i class="bi bi-pencil"></i></button> <button class="btn btn-sm btn-outline-danger" onclick="deletePrice('${p.id}')"><i class="bi bi-trash"></i></button></td></tr>`).join('')}
+function addPrice(){$('pId').value='';$('pCategory').value='';$('pName').value='';$('pValue').value='';modal('priceModal').show()}
+function editPrice(id){let p=db.prices.find(x=>x.id===id);$('pId').value=p.id;$('pCategory').value=p.category;$('pName').value=p.name;$('pValue').value=p.value;modal('priceModal').show()}
+function savePrice(){let category=$('pCategory').value.trim(),name=$('pName').value.trim(),value=Number($('pValue').value);if(!category||!name||!Number.isFinite(value)||value<0){alert('Preencha categoria, serviço e preço válido.');return}let id=$('pId').value,p={id:id||uid(),category,name,value};let i=db.prices.findIndex(x=>x.id===id);if(i>=0)db.prices[i]=p;else db.prices.push(p);modal('priceModal').hide();persist()}
+function deletePrice(id){if(confirm('Excluir este serviço do catálogo?')){db.prices=db.prices.filter(p=>p.id!==id);persist()}}
+function filteredOrders(){let a=$('reportStart').value,b=$('reportEnd').value,s=$('reportStatus').value;return db.orders.filter(o=>(!a||o.date>=a)&&(!b||o.date<=b)&&(!s||o.status===s))}
+function renderReport(){let arr=filteredOrders();$('reportCount').textContent=arr.length;$('reportQuoted').textContent=money(arr.reduce((s,o)=>s+o.total,0));$('reportPaid').textContent=money(arr.filter(o=>o.status==='Entregue').reduce((s,o)=>s+o.total,0));$('reportTable').innerHTML=arr.length?arr.map(o=>{let c=db.clients.find(x=>x.id===o.clientId)||{};return `<tr><td>#${o.number}</td><td>${esc(o.date)}</td><td>${esc(c.name||'')}</td><td>${esc(c.phone||'')}</td><td>${esc([o.brand,o.model,o.type].filter(Boolean).join(' '))}</td><td>${esc(o.diagnosis||o.problem)}</td><td>${esc(o.status)}</td><td>${money(o.total)}</td></tr>`}).join(''):'<tr><td colspan="8" class="empty">Sem dados para os filtros selecionados.</td></tr>'}
+function clearReport(){$('reportStart').value='';$('reportEnd').value='';$('reportStatus').value='';renderReport()}
+function csvCell(v){return '"'+String(v??'').replace(/"/g,'""')+'"'}
+function exportCSV(){let arr=filteredOrders();let rows=[['Nº OS','Data','Cliente','Telefone','E-mail','CPF/CNPJ','Equipamento','Marca','Modelo','Série/IMEI','Problema informado','Diagnóstico','Serviço executado','Status','Serviço (R$)','Peças (R$)','Desconto (R$)','Total (R$)','Pagamento','Garantia (dias)','Prazo']];arr.forEach(o=>{let c=db.clients.find(x=>x.id===o.clientId)||{};rows.push([o.number,o.date,c.name,c.phone,c.email,c.doc,o.type,o.brand,o.model,o.serial,o.problem,o.diagnosis,o.work,o.status,o.suggested,o.parts,o.discount,o.total,o.payment,o.warranty,o.deadline])});let csv='\ufeff'+rows.map(r=>r.map(csvCell).join(';')).join('\r\n');let blob=new Blob([csv],{type:'text/csv;charset=utf-8;'}),url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download='MPF_relatorio_ordens.csv';a.click();URL.revokeObjectURL(url)}
+function backup(){let blob=new Blob([JSON.stringify(db,null,2)],{type:'application/json'}),url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download='MPF_backup_'+today()+'.json';a.click();URL.revokeObjectURL(url)}
+function restoreBackup(e){let f=e.target.files[0];if(!f)return;let r=new FileReader();r.onload=()=>{try{let x=JSON.parse(r.result);if(!x.clients||!x.orders||!x.prices)throw Error();if(confirm('Restaurar backup? Os dados atuais serão substituídos.')){db=x;persist();alert('Backup restaurado.')}}catch(err){alert('Arquivo de backup inválido.')}e.target.value=''};r.readAsText(f)}
+function clearAll(){if(confirm('ATENÇÃO: apagar clientes, ordens e catálogo? Faça backup antes.')){if(confirm('Confirmação final: todos os dados serão apagados.')){db={clients:[],orders:[],prices:seedPrices.map((p,i)=>({id:'p'+i,category:p[0],name:p[1],value:p[2]})),settings:{}};persist()}}}
+function saveSettings(){db.settings={name:$('companyName').value,phone:$('companyPhone').value,email:$('companyEmail').value,address:$('companyAddress').value};persist();alert('Dados da assistência salvos.')}
+function loadSettings(){let s=db.settings||{};$('companyName').value=s.name||'MPF Soluções';$('companyPhone').value=s.phone||'';$('companyEmail').value=s.email||'';$('companyAddress').value=s.address||''}
+function printOrder(id){let o=db.orders.find(x=>x.id===id);if(o)printDoc(o)}
+function printCurrentOrder(){let id=$('oId').value,o=id?db.orders.find(x=>x.id===id):null;if(!o){alert('Salve a ordem antes de imprimir.');return}printDoc(o)}
+function printDoc(o){let c=db.clients.find(x=>x.id===o.clientId)||{},s=db.settings||{};let w=window.open('','_blank');if(!w){alert('Permita janelas pop-up para imprimir a OS.');return}w.document.write(`<!doctype html><html><head><meta charset="utf-8"><title>OS ${o.number}</title><style>body{font:14px Arial;margin:35px;color:#222}h1{color:#10243a;margin-bottom:3px}.sub{color:#667;margin-bottom:25px}.grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}.field{border:1px solid #ddd;padding:10px;min-height:34px}.wide{grid-column:1/-1}b{display:block;font-size:11px;color:#667;text-transform:uppercase;margin-bottom:5px}.value{white-space:pre-wrap}.total{font-size:22px;font-weight:bold;color:#176b87}.sign{display:flex;justify-content:space-between;margin-top:65px}.sign div{border-top:1px solid #777;width:42%;text-align:center;padding-top:8px}@media print{button{display:none}}</style></head><body><h1>${esc(s.name||'MPF Soluções')}</h1><div class="sub">${esc(s.phone||'')} ${esc(s.email||'')} ${esc(s.address||'')}</div><h2>ORDEM DE SERVIÇO Nº ${esc(o.number)}</h2><div class="grid">
+<div class="field"><b>Cliente</b>${esc(c.name)}</div><div class="field"><b>Telefone</b>${esc(c.phone)}</div><div class="field"><b>Data de entrada</b>${esc(o.date)}</div><div class="field"><b>Prazo previsto</b>${esc(o.deadline||'Não informado')}</div>
+<div class="field"><b>Equipamento</b>${esc([o.type,o.brand,o.model].filter(Boolean).join(' '))}</div><div class="field"><b>Série / IMEI</b>${esc(o.serial||'Não informado')}</div><div class="field"><b>Acessórios</b>${esc(o.accessories||'Nenhum informado')}</div><div class="field"><b>Condição na entrada</b>${esc(o.condition||'Não informada')}</div>
+<div class="field wide"><b>Problema relatado</b><div class="value">${esc(o.problem)}</div></div><div class="field wide"><b>Diagnóstico técnico</b><div class="value">${esc(o.diagnosis||'Pendente')}</div></div><div class="field wide"><b>Serviço / peças</b><div class="value">${esc(o.work||'A definir')}</div></div>
+<div class="field"><b>Status</b>${esc(o.status)}</div><div class="field"><b>Pagamento</b>${esc(o.payment)}</div><div class="field"><b>Serviço</b>${money(o.suggested)}</div><div class="field"><b>Peças</b>${money(o.parts)}</div><div class="field"><b>Desconto</b>${money(o.discount)}</div><div class="field"><b>Total</b><div class="total">${money(o.total)}</div></div><div class="field"><b>Garantia</b>${esc(o.warranty)} dias</div><div class="field"><b>Observações</b>${esc(o.notes||'—')}</div></div><p style="margin-top:25px;font-size:12px">A execução do serviço depende da aprovação do orçamento pelo cliente. Valores e prazos podem ser ajustados após diagnóstico e disponibilidade de peças.</p><div class="sign"><div>Assinatura do cliente</div><div>MPF Soluções</div></div><script>window.onload=()=>window.print()<\/script></body></html>`);w.document.close()}
+function openStockItem(id){let x=db.stock.find(i=>i.id===id)||{};$('stockModalTitle').textContent=id?'Editar produto':'Adicionar produto ao estoque';$('sId').value=x.id||'';$('sName').value=x.name||'';$('sCategory').value=x.category||'Teclados';$('sBrand').value=x.brand||'';$('sModel').value=x.model||'';$('sQty').value=x.qty??0;$('sMin').value=x.min??2;$('sCost').value=x.cost??0;$('sSale').value=x.sale??0;$('sImage').value=x.image||'';$('sActive').checked=x.active!==false;$('sNotes').value=x.notes||'';modal('stockModal').show()}
+function saveStockItem(){let name=$('sName').value.trim(),category=$('sCategory').value;if(!name){alert('Informe o nome do produto.');return}let x={id:$('sId').value||uid(),name,category,brand:$('sBrand').value.trim(),model:$('sModel').value.trim(),qty:Math.max(0,Number($('sQty').value)||0),min:Math.max(0,Number($('sMin').value)||0),cost:Math.max(0,Number($('sCost').value)||0),sale:Math.max(0,Number($('sSale').value)||0),image:$('sImage').value.trim()||stockIllustrations[category]||stockIllustrations.Outros,active:$('sActive').checked,notes:$('sNotes').value};let i=db.stock.findIndex(y=>y.id===x.id);if(i>=0)db.stock[i]=x;else db.stock.push(x);modal('stockModal').hide();persist()}
+function renderStock(){let q=($('stockSearch')?.value||'').toLowerCase(),cat=$('stockCategoryFilter')?.value||'',level=$('stockLevelFilter')?.value||'';let all=db.stock;let arr=all.filter(x=>(!q||(x.name+' '+x.brand+' '+x.model+' '+x.category).toLowerCase().includes(q))&&(!cat||x.category===cat)&&(!level||(level==='low'?x.qty<=x.min: x.qty===0)));$('stockCount').textContent=all.length;$('stockUnits').textContent=all.reduce((a,x)=>a+(Number(x.qty)||0),0);$('stockLow').textContent=all.filter(x=>x.qty<=x.min).length;$('stockValue').textContent=money(all.reduce((a,x)=>a+(Number(x.qty)||0)*(Number(x.cost)||0),0));$('stockGrid').innerHTML=arr.length?arr.map(x=>`<div class="col-sm-6 col-xl-4"><div class="card stock-card p-3"><img class="stock-photo mb-3" src="${esc(x.image||stockIllustrations[x.category]||stockIllustrations.Outros)}" alt="Imagem ilustrativa de ${esc(x.name)}" onerror="this.onerror=null;this.src='https://www.chinahub.com/assets/uploads/categories/cat_103_1784140739.png'"><div class="d-flex justify-content-between gap-2"><div class="fw-bold">${esc(x.name)}</div><span class="badge ${x.qty<=x.min?'stock-low':'stock-ok'}">${x.qty<=x.min?'Estoque baixo':'Disponível'}</span></div><div class="small muted">${esc(x.category)}${x.brand?' • '+esc(x.brand):''}${x.model?' • '+esc(x.model):''}</div><div class="row g-2 mt-2"><div class="col-4"><div class="small muted">Qtd.</div><strong>${x.qty}</strong></div><div class="col-4"><div class="small muted">Custo</div><strong>${money(x.cost)}</strong></div><div class="col-4"><div class="small muted">Venda</div><strong>${money(x.sale)}</strong></div></div><div class="d-flex gap-2 mt-3"><button class="btn btn-sm btn-outline-primary flex-fill" onclick="openStockItem('${x.id}')"><i class="bi bi-pencil me-1"></i>Editar</button><button class="btn btn-sm btn-outline-danger" onclick="deleteStockItem('${x.id}')"><i class="bi bi-trash"></i></button></div></div></div>`).join(''):'<div class="col-12"><div class="empty">Nenhum produto encontrado. Clique em “Adicionar produto” para cadastrar o primeiro item.</div></div>'}
+function deleteStockItem(id){if(confirm('Excluir este produto do estoque?')){db.stock=db.stock.filter(x=>x.id!==id);persist()}}
+
+function openSupplier(id){
+ let s=db.suppliers.find(x=>x.id===id)||{};
+ $('supId').value=s.id||'';$('supCompany').value=s.company||'';$('supContact').value=s.contact||'';
+ $('supCategory').value=s.category||'Acessórios para celular';$('supDDD').value=s.ddd||'';
+ $('supPhone').value=s.phone||'';$('supStatus').value=s.status||'Ativo';$('supEmail').value=s.email||'';
+ $('supWebsite').value=s.website||'';$('supProducts').value=s.products||'';
+ $('supAddress').value=s.address||'';$('supNotes').value=s.notes||'';
+ $('supplierModalTitle').textContent=id?'Editar fornecedor':'Novo fornecedor';modal('supplierModal').show()
+}
+function saveSupplier(){
+ let company=$('supCompany').value.trim(),category=$('supCategory').value;
+ if(!company){alert('Informe o nome da empresa ou fornecedor.');return}
+ let id=$('supId').value,s={id:id||uid(),company,contact:$('supContact').value.trim(),category,
+ ddd:$('supDDD').value.replace(/\D/g,'').slice(0,2),phone:$('supPhone').value.trim(),
+ status:$('supStatus').value,email:$('supEmail').value.trim(),website:$('supWebsite').value.trim(),
+ products:$('supProducts').value.trim(),address:$('supAddress').value.trim(),notes:$('supNotes').value.trim()};
+ let i=db.suppliers.findIndex(x=>x.id===id);if(i>=0)db.suppliers[i]=s;else db.suppliers.push(s);
+ modal('supplierModal').hide();persist();showPage('suppliers')
+}
+function supplierWhatsApp(s){
+ let digits=(String(s.ddd||'')+String(s.phone||'')).replace(/\D/g,'');
+ if(!digits){alert('Este fornecedor não possui telefone cadastrado.');return}
+ if(digits.length<=11)digits='55'+digits;
+ window.open('https://wa.me/'+digits,'_blank','noopener')
+}
+function renderSuppliers(){
+ let q=($('supplierSearch')?.value||'').toLowerCase(),cat=$('supplierCategoryFilter')?.value||'',st=$('supplierStatusFilter')?.value||'';
+ let arr=db.suppliers.filter(s=>(!cat||s.category===cat)&&(!st||s.status===st)&&
+ (String([s.company,s.contact,s.category,s.ddd,s.phone,s.products,s.email].join(' ')).toLowerCase().includes(q)));
+ $('supplierCount').textContent=db.suppliers.length;$('supplierActive').textContent=db.suppliers.filter(s=>s.status==='Ativo').length;
+ $('suppliersTable').innerHTML=arr.length?arr.map(s=>`<tr>
+ <td><div class="fw-semibold">${esc(s.company)}</div><div class="small muted">${esc(s.email||'')}</div></td>
+ <td>${esc(s.category)}</td><td>${esc(s.contact||'—')}</td>
+ <td>${esc([s.ddd?'('+s.ddd+')':'',s.phone].filter(Boolean).join(' '))||'—'}</td>
+ <td>${esc(s.products||'—')}</td><td><span class="badge ${s.status==='Ativo'?'text-bg-success':'text-bg-secondary'}">${esc(s.status)}</span></td>
+ <td class="text-nowrap">
+ ${s.phone?`<button class="btn btn-sm btn-outline-success" title="WhatsApp" onclick="supplierWhatsApp(db.suppliers.find(x=>x.id==='${s.id}'))"><i class="bi bi-whatsapp"></i></button>`:''}
+ <button class="btn btn-sm btn-outline-primary" title="Editar" onclick="openSupplier('${s.id}')"><i class="bi bi-pencil"></i></button>
+ <button class="btn btn-sm btn-outline-danger" title="Excluir" onclick="deleteSupplier('${s.id}')"><i class="bi bi-trash"></i></button>
+ </td></tr>`).join(''):'<tr><td colspan="7" class="empty">Nenhum fornecedor cadastrado. Clique em “Novo fornecedor” para começar.</td></tr>'
+}
+function deleteSupplier(id){
+ if(confirm('Excluir este fornecedor?')){db.suppliers=db.suppliers.filter(s=>s.id!==id);persist()}
+}
+
+function refreshAll(){renderClients();renderOrders();renderPrices();renderStock();renderSuppliers();renderDashboard();if($('reports').classList.contains('active'))renderReport();loadSettings();fillPriceSelect($('oPrice')?.value)}
+function renderDashboard(){let open=db.orders.filter(o=>!['Entregue','Cancelado'].includes(o.status)).length,wait=db.orders.filter(o=>o.status==='Aguardando').length,done=db.orders.filter(o=>['Concluído','Entregue'].includes(o.status)).length,revenue=db.orders.filter(o=>o.status==='Entregue').reduce((s,o)=>s+o.total,0);$('statOpen').textContent=open;$('statWait').textContent=wait;$('statDone').textContent=done;$('statRevenue').textContent=money(revenue);let arr=[...db.orders].reverse().slice(0,6);$('recentOrders').innerHTML=arr.length?arr.map(o=>`<tr><td class="fw-bold">#${o.number}</td><td>${esc(clientName(o.clientId))}</td><td>${esc([o.brand,o.model,o.type].filter(Boolean).join(' '))}</td><td>${esc(o.date)}</td><td>${statusBadge(o.status)}</td><td>${money(o.total)}</td></tr>`).join(''):'<tr><td colspan="6" class="empty">Nenhuma ordem cadastrada ainda.</td></tr>'}
+refreshAll();
+</script>
+</body></html>
